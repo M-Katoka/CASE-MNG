@@ -1,0 +1,7 @@
+Options -Indexes
+<FilesMatch "^(db|config|config\.example|router)\.php$">
+Require all denied
+</FilesMatch>
+<FilesMatch "\.(sql|md|zip)$">
+Require all denied
+</FilesMatch>

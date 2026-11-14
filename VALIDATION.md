@@ -1,0 +1,86 @@
+# Feature validation
+
+3 November 2026. 78 automated checks passed against an isolated test database, plus PHP syntax checks and desktop/mobile visual review. Live administrator login was also verified.
+
+- login admin
+- login super
+- login worker1
+- login worker2
+- login manager
+- public registration cannot create administrator
+- reset GET does not reset admin password
+- CSRF rejection
+- beneficiary registration
+- exact duplicate rejected
+- beneficiary list scoped
+- beneficiary direct access blocked
+- case creation
+- case direct URL isolation
+- case list isolation
+- forged case POST blocked
+- create assessment
+- create intervention
+- create referral
+- create followup
+- unified timeline contains all four activities
+- overdue reminders
+- referral list isolation
+- closure blocked with pending work
+- PDF upload
+- authorised attachment download
+- attachment access isolation
+- executable upload rejected
+- resolve_referral
+- resolve_followup
+- closure request recorded
+- administrator cannot bypass supervisor review
+- supervisor approval closes case
+- closed case is immutable
+- management cannot access case
+- filtered real XLSX export
+- export does not leak other worker
+- PDF export scoped
+- management export is aggregate only
+- generic recovery response
+- recovery request visible to admin
+- one-time password recovery
+- recovery invalidates old sessions
+- recovery link cannot be reused
+- login worker2
+- audit records closure
+- complete backup created
+- backup contains data and attachment metadata
+- backup includes document bytes
+- worker cannot access backup
+- restore completes and logs users out
+- login admin
+- restore recovers snapshot records
+- restore recovers document bytes
+- restore audited
+- login admin
+- login super
+- login worker1
+- login worker2
+- second referral created
+- referral reminder rescheduled
+- forged reminder update denied
+- pending closure freezes case changes
+- supervisor rejection reopens workflow
+- self-approval prevented
+- reset issuing requires admin password
+- reset issuing requires identity verification
+- forged report worker filter cannot expand access
+- reversed report dates rejected
+- private route blocked db.php
+- private route blocked Database/schema.sql
+- private route blocked app/core.php
+- private route blocked local/php.ini
+- private route blocked setup.php
+- private route blocked demo.php
+- private route blocked ../work/local-password.txt
+- Corrupt backup rejected without changing records
+- Expired recovery token rejected
+
+## Reproducing the integration suite
+
+Use a separate database and storage directory. tests/seed.php refuses an existing ngo_features_test database. Run it with PDO MySQL, then run app/migrate.php with NGO_DB_NAME=ngo_features_test and NGO_STORAGE set to a disposable test directory. Start the test server on port 8082 with those same environment variables and local/php.ini. Run tests/integration.py using Python with pypdf and openpyxl installed. The script assumes the freshly seeded identities and creates/changes records, restores snapshots, and changes test passwords. Never point it at a live system. The edge-case checks and corrupt-backup test were performed after the base suite; their results are listed above.
